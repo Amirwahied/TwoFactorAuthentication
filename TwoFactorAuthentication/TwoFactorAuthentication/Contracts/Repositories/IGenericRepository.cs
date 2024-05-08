@@ -9,7 +9,7 @@ namespace TwoFactorAuthentication.Contracts.Repositories
         //return single record with id
         Task<T?> GetByIdAsync(int id);
         //create new record
-        Task CreateAsync(T entity);
+        Task<int> CreateAsync(T entity);
         //update  record
         Task UpdateAsync(T entity);
         //delete record

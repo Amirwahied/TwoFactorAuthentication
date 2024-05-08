@@ -1,5 +1,7 @@
 using TwoFactorAuthentication.Contracts;
+using TwoFactorAuthentication.Contracts.Repositories;
 using TwoFactorAuthentication.Factories;
+using TwoFactorAuthentication.Implementations.Repositories;
 
 namespace TwoFactorAuthentication;
 
@@ -12,6 +14,8 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
         builder.Services.AddScoped<ISqlConnectionFactory, SqlConnectionFactory>();
+        builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
 
         var app = builder.Build();
 
@@ -32,7 +36,7 @@ public class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=User}/{action=SignUp}/{id?}");
+            pattern: "{controller=User}/{action=Login}/{id?}");
 
         app.Run();
     }

@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text;
 using TwoFactorAuthentication.Enums;
 
 namespace TwoFactorAuthentication.Services
@@ -6,14 +7,12 @@ namespace TwoFactorAuthentication.Services
     public class TokenGenerator
     {
         // Generate a random token
-        public static string GenerateToken(int length = 64)
+        public static byte[] GenerateToken(Guid Id)
         {
-            byte[] tokenBytes = new byte[length];
-            using (var rng = RandomNumberGenerator.Create())
+            using SHA512 sha512 = SHA512.Create();
             {
-                rng.GetBytes(tokenBytes);
+                return sha512.ComputeHash(Encoding.UTF32.GetBytes(Id.ToString()));
             }
-            return Convert.ToBase64String(tokenBytes);
         }
 
         // Validate a token
@@ -39,7 +38,7 @@ namespace TwoFactorAuthentication.Services
             //TODO: Check Token Correcteness
 
 
-            return true;
+            return TokenValidationStatus.CorrectToken;
         }
 
 

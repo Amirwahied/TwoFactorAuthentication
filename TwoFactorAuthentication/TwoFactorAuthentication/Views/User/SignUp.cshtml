@@ -1,4 +1,4 @@
-﻿@using TwoFactorAuthentication.Dto.User.Commands
+﻿@using TwoFactorAuthentication.Dto.User
 @model CreateUserDto 
 
 @{
@@ -16,7 +16,7 @@
 
                                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                                <form id="signupForm" class="mx-1 mx-md-4" action="@Url.Action("Signup", "User")" method="post">
+                                <form id="signupForm" action="@Url.Action("Signup", "User")" method="post" class="mx-1 mx-md-4">
 
                                     <!-- Username -->
                                     <div class="d-flex flex-row align-items-center mb-4">
@@ -41,6 +41,7 @@
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div data-mdb-input-init class="form-outline flex-fill mb-0">
                                             <input type="password" id="Password" name="Password" class="form-control" placeholder="Password" />
+                                            <p>Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.</p>
                                         </div>
                                     </div>
 
@@ -82,17 +83,34 @@
             var username = document.getElementById("Username").value;
             var password = document.getElementById("Password").value;
 
+            //Username should not be empty
             if (username.trim() === "") {
                 alert("Please enter a username.");
                 return;
             }
 
+            // Username validation (no space  at least 4 characters)
+            var usernameRegex = /^(?!.*\s).{4,}$/;
+            if (!usernameRegex.tes(username)) {
+                alert("Username must be at least 4 characters long and cannot contain spaces.");
+                return;
+            }
+
+            //Password should not be empty
             if (password.trim() === "") {
                 alert("Please enter a password.");
                 return;
             }
 
-            // If validation passes, submit the form
+            //Password Validation at least(8 characters - one digit - one upper case - one lower case - one special character)
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+                return;
+            }
+
+
+            //Continue Process
             document.getElementById("signupForm").submit();
         }
     </script>
