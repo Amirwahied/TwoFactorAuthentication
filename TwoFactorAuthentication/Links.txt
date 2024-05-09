@@ -1,0 +1,25 @@
+Best Practices: 
+https://vertabelo.com/blog/user-authentication-module/
+
+What Is Two-Factor Authentication (2FA)? How It Works and Example
+https://www.investopedia.com/terms/t/twofactor-authentication-2fa.asp
+
+Database schema for
+Django Two Factor Auth
+https://drawsql.app/templates/django-two-factor-auth
+
+ASP.NET Core Identity 2FA with Google Authenticator
+https://dev.to/mohammedahmed/aspnet-core-identity-2fa-with-google-authenticator-i13
+
+Authentication Using Google In ASP.NET Core 2.0
+https://ankitsharmablogs.com/authentication-using-google-asp-net-core-2-0/
+
+Two Factor Google Authenticator Using ASP.NET Core And Angular
+https://www.c-sharpcorner.com/article/two-factor-google-authenticator-using-asp-net-core-and-angular/
+
+How to set up two factor authentication in ASP.NET Core using Google Authenticator
+https://medium.com/free-code-camp/how-to-set-up-two-factor-authentication-on-asp-net-core-using-google-authenticator-4b15d0698ec9
+
+Implementing Two-Factor Auth using an Authenticator App in ASP.NET
+https://weblog.west-wind.com/posts/2023/May/17/Implementing-TwoFactor-Auth-using-an-Authenticator-app-in-ASPNET
+
