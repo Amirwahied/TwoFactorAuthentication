@@ -13,6 +13,6 @@ namespace TwoFactorAuthentication.Authentication.Models
         public DateTime? TFA_LastUse { get; set; }
         public required string Token { get; set; }
         public string? Authenticator_Key { get; set; }
-        public int? Created_By { get; set; }
+        public Guid Created_By { get; set; }
     }
 }

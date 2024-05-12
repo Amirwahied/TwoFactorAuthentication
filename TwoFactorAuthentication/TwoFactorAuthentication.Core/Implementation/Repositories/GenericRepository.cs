@@ -19,7 +19,7 @@ namespace TwoFactorAuthentication.Core.Implementations.Repositories
         {
             await using SqlConnection sqlConnection = _sqlConnection.CreateSqlConnection();
             {
-                return sqlConnection.Execute(procedureName
+                return await sqlConnection.ExecuteAsync(procedureName
                                             ,entity
                                             ,commandType: CommandType.StoredProcedure
                     );

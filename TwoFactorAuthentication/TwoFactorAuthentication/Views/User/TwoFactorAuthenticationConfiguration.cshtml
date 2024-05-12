@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@using TwoFactorAuthentication._2FA.Model
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+    ViewData["Title"] = "Two Factor Authentication";
+}
+
+<div class="text-center">
+    <hr />
+    <p>
+        <strong>Setup QR Code:</strong><br />
+        <img src="@HttpContextAccessor.HttpContext.Session.GetString("ImageUrl")" />
+    </p>
+    <p><strong>Manual Setup Code: </strong> @HttpContextAccessor.HttpContext.Session.GetString("ManualKey")</p>
+    <hr />
+    <form id="authenticationForm" action="@Url.Action("TwoFactorAuthenticationConfiguration", "User")" method="post">
+        <p>
+            Validate Code: <input type="text" name="pincode" />
+        </p>
+        <p><button class="btn btn-primary">Validate My Code!</button></p>
+    </form>
+
+    @if (TempData.ContainsKey("ValidationResult"))
+    {
+        <p style="font-weight:bold">@TempData["ValidationResult"]</p>
+    }
+</div>

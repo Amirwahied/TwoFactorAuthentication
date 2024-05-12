@@ -1,4 +1,7 @@
-﻿using TwoFactorAuthentication.Authentication.Contracts.Repositories;
+﻿using Microsoft.AspNetCore.Http;
+using System.Data.SqlClient;
+using TwoFactorAuthentication.Authentication.Constants;
+using TwoFactorAuthentication.Authentication.Contracts.Repositories;
 using TwoFactorAuthentication.Authentication.Contracts.Services;
 using TwoFactorAuthentication.Authentication.Dto;
 using TwoFactorAuthentication.Authentication.Enums;
@@ -13,23 +16,21 @@ namespace TwoFactorAuthentication.Authentication.Services
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenEncryptor _tokenEncryptor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserManagementService(IUserRepository userRepository
                                    , IPasswordHasher passwordHasher
-                                   , ITokenEncryptor tokenEncryptor)
+                                   , ITokenEncryptor tokenEncryptor
+                                   , IHttpContextAccessor httpContextAccessor)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _tokenEncryptor = tokenEncryptor;
+            _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<SignUpStatus> SignUp(CreateUserDto userDto)
-        {
-            //Check Logged in user token from database
-            if (await _userRepository.CheckUserTokenExistence(userDto.Token) != 1)
-            {
-                return SignUpStatus.InvalidToken;
-            }
 
+        public User_Login_Info CreateUserEntity(CreateUserDto userDto, Guid createdByUserId)
+        {
             //Create hashed password and salt
             var hashedPassword = _passwordHasher.HashPasword(userDto.Password, out var salt);
 
@@ -40,23 +41,98 @@ namespace TwoFactorAuthentication.Authentication.Services
             var token = _tokenEncryptor.Encrypt(userId.ToString());
 
 
-            //TODO: Map Dto to Domain Entity and create new user
-            var userEntity = new User_Login_Info()
+            // Map Dto to Domain Entity and create new user
+            return new User_Login_Info()
             {
                 Id = userId,
                 Username = userDto.Username,
                 Password = hashedPassword,
                 Salt = salt,
                 Token = token,
-
+                Created_By = createdByUserId
             };
+        }
 
-            if (await _userRepository.CreateAsync(userEntity, nameof(StoredProcedureNames.users_login_info_CreateUser)) == 1)
+        public async Task<string> Enable2FA(Guid id)
+        {
+            try
             {
+                //Check Logged in user token from database
+                if (await _userRepository.Enable2FA(id) > 0)
+                {
+                    _httpContextAccessor.HttpContext.Session.SetString(CustomClaimsTypes.IsTwoFactorEnabled, "True");
+                    return "2FA Enabled Successfully";
+                }
+                return "2FA Not Enabled";
+            }
+            catch (SqlException ex)
+            {
+                return $"SQL Error: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                return $"Exception: {ex.Message}";
+            }
+        }
+
+        public async Task<SignUpStatus> SignUp(CreateUserDto userDto, Guid createdByUserId)
+        {
+            try
+            {
+                //Check Logged in user token from database
+                if (await _userRepository.CheckUserTokenExistence(userDto.Token) != 1)
+                {
+                    return SignUpStatus.InvalidToken;
+                }
+
+                await _userRepository.CreateAsync(CreateUserEntity(userDto, createdByUserId), nameof(StoredProcedureNames.users_login_info_CreateUser));
                 return SignUpStatus.SignedUpSuccessfully;
             }
+            catch (SqlException ex)
+            {
+                //Username duplicated
+                if (ex.Message.Contains("Cannot insert duplicate key"))
+                {
+                    return SignUpStatus.UsernameAlreadyUsed;
+                }
+                return SignUpStatus.DatabaseError;
+            }
+            catch (Exception)
+            {
+                return SignUpStatus.SignedUpFailed;
+            }
+        }
 
-            return SignUpStatus.SignedUpFailed;
+        public async Task<int> UpdateToken(Guid id, string token)
+        {
+            //try
+            //{
+            return await _userRepository.UpdateToken(id, token);
+            //}
+            //catch (SqlException ex)
+            //{
+            //	return $"SQL Error: {ex.Message}";
+            //}
+            //catch (Exception ex)
+            //{
+            //	return $"Exception: {ex.Message}";
+            //}
+        }
+
+        public async Task<int> UpdateAuthenticatorKey(Guid id, string token)
+        {
+            //try
+            //{
+            return await _userRepository.UpdateAuthenticatorKey(id, token);
+            //}
+            //catch (SqlException ex)
+            //{
+            //	return $"SQL Error: {ex.Message}";
+            //}
+            //catch (Exception ex)
+            //{
+            //	return $"Exception: {ex.Message}";
+            //}
         }
     }
 }

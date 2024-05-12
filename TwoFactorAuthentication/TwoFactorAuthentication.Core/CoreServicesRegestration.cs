@@ -13,7 +13,7 @@ namespace TwoFactorAuthentication.Core
     {
         public static IServiceCollection AddCoreServices(this IServiceCollection services,IConfiguration configuration)
         {
-            services.AddScoped<ISqlConnectionFactory, SqlConnectionFactory>();
+            services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ITokenEncryptor, TokenEncryptor>();

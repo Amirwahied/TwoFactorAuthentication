@@ -6,12 +6,6 @@
 @{
     ViewBag.Title = "Sign Up";
 }
-@if (TempData.ContainsKey("SuccessMessage"))
-{
-    <div class="alert alert-success" role="alert">
-        @TempData["SuccessMessage"]
-    </div>
-}
 
 @if (TempData.ContainsKey("ErrorMessage"))
 {

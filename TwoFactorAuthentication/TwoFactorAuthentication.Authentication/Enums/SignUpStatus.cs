@@ -3,8 +3,9 @@
     public enum SignUpStatus
     {
         InvalidToken,
-        UsernameRecieved,
         SignedUpSuccessfully,
         SignedUpFailed,
+        UsernameAlreadyUsed,
+        DatabaseError
     }
 }

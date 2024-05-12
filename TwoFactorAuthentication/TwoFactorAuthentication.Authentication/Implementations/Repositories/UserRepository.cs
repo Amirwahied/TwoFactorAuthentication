@@ -20,10 +20,20 @@ namespace TwoFactorAuthentication.Authentication.Implementations.Repositories
         {
             await using SqlConnection sqlConnection = _sqlConnection.CreateSqlConnection();
             {
-                return sqlConnection.Execute(StoredProcedureNames.users_login_info_ActivateUser.ToString()
+                return await sqlConnection.ExecuteAsync(nameof(StoredProcedureNames.users_login_info_ActivateUser)
                                             , new { Id = id }
                                             , commandType: CommandType.StoredProcedure
                     );
+            }
+        }
+        public async Task<int> Enable2FA(Guid id)
+        {
+            await using SqlConnection sqlConnection = _sqlConnection.CreateSqlConnection();
+            {
+                return await sqlConnection.ExecuteAsync(nameof(StoredProcedureNames.users_login_info_EnableTwoFactorAuthentication)
+                                           , new { Id = id }
+                                           , commandType: CommandType.StoredProcedure
+                   );
             }
         }
 
@@ -31,7 +41,7 @@ namespace TwoFactorAuthentication.Authentication.Implementations.Repositories
         {
             await using SqlConnection sqlConnection = _sqlConnection.CreateSqlConnection();
             {
-                return sqlConnection.QueryFirstOrDefault<User_Login_Info>(StoredProcedureNames.users_login_info_GetUserByUserName.ToString()
+                return await sqlConnection.QueryFirstOrDefaultAsync<User_Login_Info>(nameof(StoredProcedureNames.users_login_info_GetUserByUserName)
                                                                         , new { Username = username }
                                                                         , commandType: CommandType.StoredProcedure);
             }
@@ -41,9 +51,31 @@ namespace TwoFactorAuthentication.Authentication.Implementations.Repositories
         {
             await using SqlConnection sqlConnection = _sqlConnection.CreateSqlConnection();
             {
-                return sqlConnection.QueryFirstOrDefault<int?>(StoredProcedureNames.users_login_info_CheckUserTokenExistence.ToString()
+                return await sqlConnection.QueryFirstOrDefaultAsync<int?>(nameof(StoredProcedureNames.users_login_info_CheckUserTokenExistence)
                                                                         , new { Token = token }
                                                                         , commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public async Task<int> UpdateToken(Guid id, string token)
+        {
+            await using SqlConnection sqlConnection = _sqlConnection.CreateSqlConnection();
+            {
+                return await sqlConnection.ExecuteAsync(nameof(StoredProcedureNames.users_login_info_UpdateToken)
+                                            , new { Id = id, newToken = token }
+                                            , commandType: CommandType.StoredProcedure
+                    );
+            }
+        }
+
+        public async Task<int> UpdateAuthenticatorKey(Guid id, string manualKey)
+        {
+            await using SqlConnection sqlConnection = _sqlConnection.CreateSqlConnection();
+            {
+                return await sqlConnection.ExecuteAsync(nameof(StoredProcedureNames.users_login_info_UpdateAuthenticatorKey)
+                                            , new { Id = id, authenticatorKey = manualKey }
+                                            , commandType: CommandType.StoredProcedure
+                    );
             }
         }
     }

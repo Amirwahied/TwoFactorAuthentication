@@ -3,6 +3,9 @@
     public enum LoginStatus
     {
         InvalidUsernameOrPassword,
-        LoggedInSuccessfully
+        LoggedInSuccessfully,
+        LoginFailed,
+        DatabaseError,
+        TwoFactorRequired
     }
 }

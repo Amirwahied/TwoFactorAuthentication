@@ -1,0 +1,13 @@
+﻿<div class="text-center">
+
+    <form id="authenticationForm" action="@Url.Action("TwoFactorAuthenticationCheck", "User")" method="post">
+        <p>
+            Validate Code: <input type="text" name="pincode" />
+        </p>
+        <p><button class="btn btn-primary">Validate My Code!</button></p>
+    </form>
+    @if (TempData.ContainsKey("ValidationResult"))
+    {
+            <p style="font-weight:bold">@TempData["ValidationResult"]</p>
+    }
+</div>

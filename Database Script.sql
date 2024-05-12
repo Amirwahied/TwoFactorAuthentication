@@ -1,6 +1,6 @@
 USE [Task1_TwoFactorAuthentication]
 GO
-/****** Object:  Table [dbo].[users_login_info]    Script Date: 5/12/2024 2:47:35 AM ******/
+/****** Object:  Table [dbo].[users_login_info]    Script Date: 5/12/2024 6:39:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,39 +14,34 @@ CREATE TABLE [dbo].[users_login_info](
 	[Is_TFA_Enabled] [bit] NOT NULL,
 	[TFA_LastUse] [datetime] NULL,
 	[Token] [nvarchar](64) NOT NULL,
-	[Authenticator_Key] [varchar](32) NULL,
-	[Created_By] [int] NULL,
+	[Authenticator_Key] [varchar](70) NULL,
+	[Created_By] [uniqueidentifier] NULL,
+	[Last_SignIn_Time] [time](7) NULL,
  CONSTRAINT [PK__users_lo__3214EC074E96BFC0] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'7e554542-c1da-45d5-b605-0346556995a8', N'amir8', 0x556156D502A114A7AF43FCA86BED087FD6725A67A2F06711A9E923940A5C79A91184F5734C4F375AB5043647520C7E8C1F1BEA24D8475D8725664EC5E10A5979, 0xCB595EBBFBDA253D9DCAE71A5763CC4487721F0A4A3BA5507B66E3E86AEB9D33322682F3B86ADE57FA9989F819FF43F0EABB820544263E700B95D2C368B13475, 1, 0, NULL, N'Ur9FtrMsA2Ye32EP6cL7o16ouSb/BmJ12Y/uC4od9Cr40I9ljZkvQSY3hL7SyO+m', NULL, NULL)
+INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By], [Last_SignIn_Time]) VALUES (N'7e554542-c1da-45d5-b605-0346556995a8', N'amir8', 0x556156D502A114A7AF43FCA86BED087FD6725A67A2F06711A9E923940A5C79A91184F5734C4F375AB5043647520C7E8C1F1BEA24D8475D8725664EC5E10A5979, 0xCB595EBBFBDA253D9DCAE71A5763CC4487721F0A4A3BA5507B66E3E86AEB9D33322682F3B86ADE57FA9989F819FF43F0EABB820544263E700B95D2C368B13475, 1, 1, NULL, N'Ur9FtrMsA2Ye32EP6cL7o16ouSb/BmJ12Y/uC4od9Cr40I9ljZkvQSY3hL7SyO+m', NULL, NULL, NULL)
 GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'2617adcd-bdb0-4ef1-a3a0-04cbd4ddca0f', N'amir10', 0xEAD42A6C4DBBEEBED92F0CB8230BA6D41E8A99CBB048FE8FB00F5901CFE4FB78C99B5563B8E933F206A480495BA6CD748166731FD564E70CE830840A4A78EBF2, 0xA30C49A950CD5968B3EFA23ADEA57BF1019ED0087235DBCE0DF8487F901B36D75082743B5A7563C87863713A26946E7429E27AD9E123B3A27C0694EC10C8A074, 1, 0, NULL, N'tHZUrE1YgzzdBm+hFkphCCAJ0NBElhJyhZWRQ8hucBdRQefjKZvBRaXh/D4IcooH', NULL, NULL)
+INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By], [Last_SignIn_Time]) VALUES (N'bd56d710-5045-4503-8101-3e0d1b58f5f4', N'amir10', 0x832C0B865AEB45C30534277810092DBC3C5073571338A0066648AC3D9CC5E9C3CA8708F7096DD02A8F2291E9BA6DCFD9A0CB2A134C6C479325A3AD6DBEA8CCD2, 0xC90E7B21AE8A74403DE5AA35A336F9ACE28FAFE277735BBD5C2C97E7D710DDD571F2D83D67F533506B05DEB75C6C18531A7524B6CF7BAE31479AC3043DF7AE21, 1, 0, NULL, N'Gwy+KCT/9blBRzANwBUu37AQMozo8ss38YqXXw2Ub/IrMtqGUbwSdYsB7Nm80FiF', NULL, N'7e554542-c1da-45d5-b605-0346556995a8', NULL)
 GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'808229c3-0bad-429b-928e-353994a9c917', N'amir4', 0x1F6A2008C82E221FF9696D9570BB8CB9CECB442A842E092C42590352185EDB56FA1974EA847F84F9956E699F34876D65B341D3F34309C10F9709943541D3EB5C, 0x0B48304B5E797F8B8EF1C11AB8A65D06A869031641268420B785D0534AD54078D8BF4A911F8954B17126B23E4E5C37EF6FACEC8F9A3B135CEDB6ECE4A3B04361, 0, 0, NULL, N'zcFsfnhM5SroRhS6QTibdTKimKhWWXo2mDv9ubG0xFYkC1yITI3nQcpjwz0rWOq1', NULL, NULL)
+INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By], [Last_SignIn_Time]) VALUES (N'c495dd4f-4798-450e-8416-680ab5c13117', N'amir11', 0x2329D91DD62EB40B2B4A3F9312C449C225386BD5AAA9750DE0B7694EF3A5EFFE5CE2D7C53546ECB36A8372FA92E1EBA3579CBD8A045C242432145003178B343C, 0x1703BECE0FDBA395B747DD71F826EE721CA6DBCF83A7A974874FAB5248A93F2798C28F0E53639EAB24437DB4344B8EE456B9E3E8830C78CEA09B7F2857838830, 0, 0, NULL, N'KIRNA5biZUAioHT/41i61SQcFsoFeNqZKnOCxXZsyi5lX5VinEYGHdJmJpKNJ8Yq', NULL, N'7e554542-c1da-45d5-b605-0346556995a8', NULL)
 GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'e97d7791-8ee8-41e8-bf6f-556976441375', N'amir6', 0x74B38092B1155C02376B9D8CA848A5354E4C341BEB5E6453DD663B68BDD3A7253B86C514BB3FCF324B7CDE096418C959B60540DF5E6C66FA672EA36675B8BFAC, 0x9E37B888266CEBCAAE24046FED79D4F56689FE02B435B517181509A4D0A142A317DF14AC3D81C27BE514545C30B5E1AE46CED3ADD82D26DCACA1FB6BCF826518, 0, 0, NULL, N'LvzNY8Q0BLyAxyte8zS/FzLgWa1eObD7wA/U5qLrdv8/ZXApmt3wSA5Dn7j3+Vif', NULL, NULL)
+SET ANSI_PADDING ON
 GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'df43ff25-bfc1-4e39-aae4-5bfe1cf4f4a5', N'amir4', 0x00C977DFDD0FDAC7FCF3F5647917322260CC8CCC897362C733AA97C4FF4A2FC4331F822F615CD72A56196781322E92A14EE5B29CB76CABA65EC09F890107FAD1, 0xE53A6EE2BDB62C3D5E1C10C83D75102D62FB4F05D7E4FF57C7D903D1E09D56C3F54A7238138E0336E5632682BB003B8FD118801EBA8D46216EB749A39D6B7084, 0, 0, NULL, N'O+LbspcIcI1xD4Bl0+7OFMsMrV2LAwstOj7G7Zu5WPIDt0grrDaW3JiTXE2cOufg', NULL, NULL)
-GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'1a825356-a0dd-40d3-9984-777debd30220', N'amir5', 0x1D1831EF77658917DB4336E8D991A5B24CED6EDF6B04D409D84ED02C92A898878B15B55881DA82CE4B2B23D1ECDA99C3A306B43F58093DAA9695ECD9C7A5AB8C, 0x8A81261AF11BE124E97B61B686E6BF53BAB001D20EAB055EEE639648387A75AEA2CF7AC5CF65157D85606796482B306A701D036F4432E668A623457DDF9A1AF0, 1, 0, NULL, N'tPvxcGV0OyHizoSBO+RBm58VIZXbQtMZaVmNe153NDjmil3wXqVQR4cTxlMr17Ri', NULL, NULL)
-GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'2e30445f-006f-46e6-bba7-9d7962ee1eda', N'amir', 0x3606DCBEDA3412D4ADBE0744EE80D47CA8C79DEE0B9613E2A54CE077BEE43428C49B767EDB8885F5A0707FA16F50F4214F36D32AF5E71D3720C16DF3A949F4E7, 0x50134C1202ED7386E4FBBF53319DADC9B9A506D765ADC7846886ED3F934C4758399D0D79F64E87F7F83B27D0DCF50A7AF5B652731C1FD231D3DA31BF8D26BE4C, 0, 0, NULL, N'늗썘樀┼쨽귣ౠ뱡詼骜�뫇숖쑩᪲ﮱ昙谓귋怆仃鍴톨먆鳞⪡᠃ꤡ궘', NULL, NULL)
-GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'56f95f57-17c3-4f5f-ac20-a2664049917e', N'amir10', 0x181BEEE97E6860E7A2E3DCE971B22F2B702D79BE2E1D3C702F54054044DCBBA5EEC562F9772BCC2AD7D09DEBED38484A27F5C0ADA914AB6C217832970FB2B991, 0x8150A3AC64345FF0A7964BEF449DADA6EB0F0F912981CF8A66E7850F8F73F9192DE1E623DE761B836835DD0E56C9AE6DC34618C50A4CD01F7FE2332C28933F36, 0, 0, NULL, N'FmlUVzoaYLt8P9hKqM1EYpwoLf0lfmKAS4RJXYhA4aI+FVGvktU9b03qBvV7wJNn', NULL, NULL)
-GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'1e8ddb72-d0e9-41b9-b156-b2c035b4fed9', N'amir10', 0x70491B63163945487FE3AA57DD4956CB41F0EB71F38B3E99FBEB48EC07D53E07061C314A24237109BF17BF5B4C7D83EC2BF4F52554A0391A993099EBBC48A21C, 0x490072FBA83D37542A97552B6FD474080D9CFE5F1FA4E79A11259624E7CA7271BC3D81854428D2B871D6ABEC995EE8C9F2B280396B8DCEA5B8C34E40ABADCDA9, 0, 0, NULL, N'paxBuNJY0YVLNNpcdf2xjhRhOFSMu/uBEKbki3du/WgJKnJLkFi0CmZyGJMOo17K', NULL, NULL)
-GO
-INSERT [dbo].[users_login_info] ([Id], [Username], [Password], [Salt], [Is_Active], [Is_TFA_Enabled], [TFA_LastUse], [Token], [Authenticator_Key], [Created_By]) VALUES (N'efabd272-fb2e-44da-bc14-cb9012521dbc', N'amir9', 0xB4D3CEB4C4653DE5D5849D5B44BC165E3C7353E160127094FE9C26E1D18D433BAE063B7519B9EB197866A32AA15279992359C2BE830F469D706F585EA35A0282, 0x6FE6079937A12CA967EADB2B054BB751B3BA8D6120CF383E2B4394053EA93A1E3A6DF94338FC4322CE61EBBD6B5801AC0A0247D5268AAD46EDB2873AB828F905, 0, 0, NULL, N'UBP5PrqP0vyGxdq5MlyR94edsb+Dfmq9rz82EGPAXvYJPzqxhfRy5OUnFPny2xpP', NULL, NULL)
+/****** Object:  Index [UN_Username]    Script Date: 5/12/2024 6:39:28 PM ******/
+ALTER TABLE [dbo].[users_login_info] ADD  CONSTRAINT [UN_Username] UNIQUE NONCLUSTERED 
+(
+	[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[users_login_info] ADD  CONSTRAINT [DF__users_log__Is_Ac__37A5467C]  DEFAULT ((0)) FOR [Is_Active]
 GO
 ALTER TABLE [dbo].[users_login_info] ADD  CONSTRAINT [DF__users_log__Is_2F__38996AB5]  DEFAULT ((0)) FOR [Is_TFA_Enabled]
 GO
-/****** Object:  StoredProcedure [dbo].[users_login_info_ActivateUser]    Script Date: 5/12/2024 2:47:35 AM ******/
+/****** Object:  StoredProcedure [dbo].[users_login_info_ActivateUser]    Script Date: 5/12/2024 6:39:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -60,7 +55,7 @@ update users_login_info
 where Id = @Id
 
 GO
-/****** Object:  StoredProcedure [dbo].[users_login_info_CheckUserTokenExistence]    Script Date: 5/12/2024 2:47:35 AM ******/
+/****** Object:  StoredProcedure [dbo].[users_login_info_CheckUserTokenExistence]    Script Date: 5/12/2024 6:39:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -76,7 +71,7 @@ from users_login_info
 where Token = @Token
 
 GO
-/****** Object:  StoredProcedure [dbo].[users_login_info_CreateUser]    Script Date: 5/12/2024 2:47:35 AM ******/
+/****** Object:  StoredProcedure [dbo].[users_login_info_CreateUser]    Script Date: 5/12/2024 6:39:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -87,11 +82,12 @@ CREATE proc [dbo].[users_login_info_CreateUser]
 @Password varbinary(64),
 @Salt varbinary(64),
 @Token nvarchar(200),
-@Created_By int =null,
+@Created_By uniqueidentifier = null,
 @Is_Active bit = 0,
 @Is_TFA_Enabled bit = 0,
 @TFA_LastUse datetime = null,
-@Authenticator_Key datetime = null
+@Authenticator_Key nvarchar(70) = null,
+@Last_SignIn_Time time(7) = null
 as
 BEGIN
 INSERT INTO [dbo].[users_login_info]
@@ -104,7 +100,8 @@ INSERT INTO [dbo].[users_login_info]
 		   ,Is_Active
 		   ,Is_TFA_Enabled
 		   ,TFA_LastUse
-		   ,Authenticator_Key)
+		   ,Authenticator_Key
+		   ,Last_SignIn_Time)
      VALUES
            (@Id
            ,@Username
@@ -115,29 +112,72 @@ INSERT INTO [dbo].[users_login_info]
 		   ,@Is_Active
 		   ,@Is_TFA_Enabled
 		   ,@TFA_LastUse
-		   ,@Authenticator_Key)
+		   ,@Authenticator_Key
+		   ,@Last_SignIn_Time)
 
 END
-
 GO
-/****** Object:  StoredProcedure [dbo].[users_login_info_GetUserByUserName]    Script Date: 5/12/2024 2:47:35 AM ******/
+/****** Object:  StoredProcedure [dbo].[users_login_info_EnableTwoFactorAuthentication]    Script Date: 5/12/2024 6:39:28 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-Create proc [dbo].[users_login_info_GetUserByUserName]
+Create proc [dbo].[users_login_info_EnableTwoFactorAuthentication]
+@Id uniqueidentifier 
+as
+
+update users_login_info
+	   set Is_TFA_Enabled = 1
+where Id = @Id
+GO
+/****** Object:  StoredProcedure [dbo].[users_login_info_GetUserByUserName]    Script Date: 5/12/2024 6:39:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE proc [dbo].[users_login_info_GetUserByUserName]
 @Username nvarchar(80)
 as
 
-select Id
-	  ,Username
-	  ,Password
-	  ,Salt
-	  ,Is_Active
-	  ,Is_TFA_Enabled
-	  ,Token 
+--select Id
+--	  ,Username
+--	  ,Password
+--	  ,Salt
+--	  ,Is_Active
+--	  ,Is_TFA_Enabled
+--	  ,Token 
+
+select *
+
 from users_login_info
 
 where Username = @Username
+GO
+/****** Object:  StoredProcedure [dbo].[users_login_info_UpdateAuthenticatorKey]    Script Date: 5/12/2024 6:39:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create proc [dbo].[users_login_info_UpdateAuthenticatorKey]
+@Id uniqueidentifier,
+@authenticatorKey nvarchar(70)
+as
 
+update users_login_info
+	   set Authenticator_Key = @authenticatorKey
+where Id = @Id
+GO
+/****** Object:  StoredProcedure [dbo].[users_login_info_UpdateToken]    Script Date: 5/12/2024 6:39:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+Create proc [dbo].[users_login_info_UpdateToken]
+@Id uniqueidentifier,
+@newToken nvarchar(64)
+as
+
+update users_login_info
+	   set Token = @newToken
+where Id = @Id
 GO
