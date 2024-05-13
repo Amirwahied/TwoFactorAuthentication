@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Data.SqlClient;
-using TwoFactorAuthentication.Authentication.Constants;
 using TwoFactorAuthentication.Authentication.Contracts.Repositories;
 using TwoFactorAuthentication.Authentication.Contracts.Services;
 using TwoFactorAuthentication.Authentication.Dto;
@@ -53,86 +51,26 @@ namespace TwoFactorAuthentication.Authentication.Services
             };
         }
 
-        public async Task<string> Enable2FA(Guid id)
+        public async Task Enable2FA(Guid id)
         {
-            try
-            {
-                //Check Logged in user token from database
-                if (await _userRepository.Enable2FA(id) > 0)
-                {
-                    _httpContextAccessor.HttpContext.Session.SetString(CustomClaimsTypes.IsTwoFactorEnabled, "True");
-                    return "2FA Enabled Successfully";
-                }
-                return "2FA Not Enabled";
-            }
-            catch (SqlException ex)
-            {
-                return $"SQL Error: {ex.Message}";
-            }
-            catch (Exception ex)
-            {
-                return $"Exception: {ex.Message}";
-            }
+            await _userRepository.Enable2FA(id);
         }
 
         public async Task<SignUpStatus> SignUp(CreateUserDto userDto, Guid createdByUserId)
         {
-            try
-            {
-                //Check Logged in user token from database
-                if (await _userRepository.CheckUserTokenExistence(userDto.Token) != 1)
-                {
-                    return SignUpStatus.InvalidToken;
-                }
 
-                await _userRepository.CreateAsync(CreateUserEntity(userDto, createdByUserId), nameof(StoredProcedureNames.users_login_info_CreateUser));
-                return SignUpStatus.SignedUpSuccessfully;
-            }
-            catch (SqlException ex)
+            if (await _userRepository.CheckUserTokenExistence(userDto.Token) != 1)
             {
-                //Username duplicated
-                if (ex.Message.Contains("Cannot insert duplicate key"))
-                {
-                    return SignUpStatus.UsernameAlreadyUsed;
-                }
-                return SignUpStatus.DatabaseError;
+                return SignUpStatus.InvalidToken;
             }
-            catch (Exception)
-            {
-                return SignUpStatus.SignedUpFailed;
-            }
+
+            await _userRepository.CreateAsync(CreateUserEntity(userDto, createdByUserId), nameof(StoredProcedureNames.users_login_info_CreateUser));
+            return SignUpStatus.SignedUpSuccessfully;
         }
 
-        public async Task<int> UpdateToken(Guid id, string token)
+        public async Task UpdateAuthenticatorKey(Guid id, string token)
         {
-            //try
-            //{
-            return await _userRepository.UpdateToken(id, token);
-            //}
-            //catch (SqlException ex)
-            //{
-            //	return $"SQL Error: {ex.Message}";
-            //}
-            //catch (Exception ex)
-            //{
-            //	return $"Exception: {ex.Message}";
-            //}
-        }
-
-        public async Task<int> UpdateAuthenticatorKey(Guid id, string token)
-        {
-            //try
-            //{
-            return await _userRepository.UpdateAuthenticatorKey(id, token);
-            //}
-            //catch (SqlException ex)
-            //{
-            //	return $"SQL Error: {ex.Message}";
-            //}
-            //catch (Exception ex)
-            //{
-            //	return $"Exception: {ex.Message}";
-            //}
+            await _userRepository.UpdateAuthenticatorKey(id, token);
         }
     }
 }

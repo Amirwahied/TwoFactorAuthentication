@@ -4,8 +4,5 @@
     {
         InvalidToken,
         SignedUpSuccessfully,
-        SignedUpFailed,
-        UsernameAlreadyUsed,
-        DatabaseError
     }
 }

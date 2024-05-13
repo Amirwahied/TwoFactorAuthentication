@@ -4,10 +4,15 @@
 @{
     ViewBag.Title = "Login";
 }
-@if (TempData.ContainsKey("ErrorMessage"))
+@if (ViewData.ModelState.ErrorCount > 0)
 {
-    <div class="alert alert-danger" role="alert">
-        @TempData["ErrorMessage"]
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@modelError.ErrorMessage</li>
+            }
+        </ul>
     </div>
 }
 <section class="vh-100">

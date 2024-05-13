@@ -4,8 +4,6 @@
     {
         InvalidUsernameOrPassword,
         LoggedInSuccessfully,
-        LoginFailed,
-        DatabaseError,
         TwoFactorRequired
     }
 }

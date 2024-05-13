@@ -1,14 +1,14 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
 using TwoFactorAuthentication.Authentication.Constants;
+using TwoFactorAuthentication.CustomAttribute;
 using TwoFactorAuthentication.Models;
 using TwoFactorAuthentication.ViewModels.User;
 
 namespace TwoFactorAuthentication.Controllers;
 
-[Authorize]
+[CustomAuthorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

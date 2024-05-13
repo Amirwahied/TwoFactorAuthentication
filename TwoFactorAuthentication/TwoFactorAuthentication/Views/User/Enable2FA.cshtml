@@ -1,10 +1,15 @@
 ﻿@using System.Security.Claims
 @using TwoFactorAuthentication.Authentication.Constants
 
-@if (TempData.ContainsKey("Message"))
+@if (ViewData.ModelState.ErrorCount > 0)
 {
-	<div class="alert alert-danger" role="alert">
-		@TempData["Message"]
+	<div class="alert alert-danger">
+		<ul>
+			@foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+			{
+				<li>@modelError.ErrorMessage</li>
+			}
+		</ul>
 	</div>
 }
 <!DOCTYPE html>
@@ -176,7 +181,7 @@
 						</a>
 					</div>
 				</div>
-				@if (!Convert.ToBoolean(Context.Session.GetString(CustomClaimsTypes.IsTwoFactorEnabled)))
+				@if (!Convert.ToBoolean(((ClaimsIdentity?)User.Identity)?.FindFirst(CustomClaimsTypes.IsTwoFactorEnabled)?.Value))
 				{
 					<form id="enable-2fa" action="@Url.Action("Enable2FA", "User")" method="post">
 

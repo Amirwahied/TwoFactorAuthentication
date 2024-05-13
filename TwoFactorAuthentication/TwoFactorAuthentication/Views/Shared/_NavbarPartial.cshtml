@@ -1,0 +1,27 @@
+﻿@using System.Security.Claims
+@using TwoFactorAuthentication.Authentication.Constants
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="SignUp">Create new user</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Enable2FA">Enable 2FA</a>
+</li>
+@if (Convert.ToBoolean(((ClaimsIdentity?)User.Identity)?.FindFirst(CustomClaimsTypes.IsTwoFactorEnabled)?.Value))
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="TwoFactorAuthenticationConfiguration">Two Factor Authentication Configuration</a>
+    </li>
+}
+<li class="nav-item">
+    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
+</li>

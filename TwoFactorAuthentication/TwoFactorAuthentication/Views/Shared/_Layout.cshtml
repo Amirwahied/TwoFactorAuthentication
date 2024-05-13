@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@using TwoFactorAuthentication.Authentication.Constants
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -19,23 +23,23 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated)
+                        @if (Convert.ToBoolean(((ClaimsIdentity?)User.Identity)?.FindFirst(CustomClaimsTypes.Is2FAVerified)?.Value))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="SignUp">Create new user</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Enable2FA">Enable 2FA</a>
-                            </li>
-                            <li class="nav-item" >
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="TwoFactorAuthentication">Two Factor Authentication Configuration</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
-                            </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="navbar-container" id="navbarContainer">
+                                    @await Html.PartialAsync("_NavbarPartial")
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            if (!Convert.ToBoolean(((ClaimsIdentity?)User.Identity)?.FindFirst(CustomClaimsTypes.IsTwoFactorEnabled)?.Value) && User.Identity.IsAuthenticated)
+                            {
+                                <li class="navbar-container" id="navbarContainer">
+                                    @await Html.PartialAsync("_NavbarPartial")
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

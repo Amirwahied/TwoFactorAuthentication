@@ -1,4 +1,18 @@
-﻿<div class="text-center">
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@modelError.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+<div class="text-center">
 
     <form id="authenticationForm" action="@Url.Action("TwoFactorAuthenticationCheck", "User")" method="post">
         <p>
@@ -11,3 +25,25 @@
             <p style="font-weight:bold">@TempData["ValidationResult"]</p>
     }
 </div>
+
+@section scripts
+{
+@* <script>
+    window.addEventListener('beforeunload', function (e) {
+        // User is closing the tab/browser
+        // You can cancel this event by using e.preventDefault();
+        // and for older browsers by using  e.returnValue = '';
+        e.preventDefault();
+            e.returnValue = '';
+            $.ajax({
+                method: "POST",
+                url: "AbandonSession",
+            })
+                .done(function (msg) {
+                    alert("Session abandoned: " + msg);
+                });
+    });
+
+
+</script> *@
+}
