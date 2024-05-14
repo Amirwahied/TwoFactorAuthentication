@@ -11,7 +11,7 @@ namespace TwoFactorAuthentication.Core
 {
     public static class CoreServicesRegestration
     {
-        public static IServiceCollection AddCoreServices(this IServiceCollection services,IConfiguration configuration)
+        public static IServiceCollection AddCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));

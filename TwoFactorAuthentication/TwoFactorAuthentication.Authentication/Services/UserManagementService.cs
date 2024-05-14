@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using TwoFactorAuthentication.Authentication.Contracts.Repositories;
+﻿using TwoFactorAuthentication.Authentication.Contracts.Repositories;
 using TwoFactorAuthentication.Authentication.Contracts.Services;
 using TwoFactorAuthentication.Authentication.Dto;
 using TwoFactorAuthentication.Authentication.Enums;
@@ -14,17 +13,15 @@ namespace TwoFactorAuthentication.Authentication.Services
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenEncryptor _tokenEncryptor;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserManagementService(IUserRepository userRepository
                                    , IPasswordHasher passwordHasher
                                    , ITokenEncryptor tokenEncryptor
-                                   , IHttpContextAccessor httpContextAccessor)
+                                    )
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _tokenEncryptor = tokenEncryptor;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public User_Login_Info CreateUserEntity(CreateUserDto userDto, Guid createdByUserId)

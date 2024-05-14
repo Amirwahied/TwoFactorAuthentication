@@ -42,8 +42,38 @@ namespace TwoFactorAuthentication.Controllers
 
         void LogError(string modelMessage, string logMessage)
         {
-            ModelState.AddModelError(modelMessage, modelMessage);
+            ModelState.AddModelError("error", modelMessage);
             _logger.LogError(logMessage);
+        }
+
+        async Task UpdateClaim(string claim, string value)
+        {
+            // Retrieve the current authentication properties
+            var authenticationProperties = await HttpContext.AuthenticateAsync();
+
+            // Update the claims in the current identity
+            var claimsIdentity = (ClaimsIdentity)authenticationProperties.Principal.Identity;
+            claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(claim));
+            // Add or update other claims as needed
+            claimsIdentity.AddClaim(new Claim(claim, value));
+
+            // Create a new claims principal with the updated identity
+            var newClaimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+
+            // Sign in the user with the updated authentication ticket
+            //sign in
+            await _httpContextAccessor.HttpContext.SignInAsync(newClaimsPrincipal,
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.MaxValue,
+                    AllowRefresh = true
+                });
+
+            // Remove the original authentication ticket from the response
+            HttpContext.Response.Cookies.Delete(
+                CookieAuthenticationDefaults.CookiePrefix + CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         [CustomAuthorize]
@@ -52,10 +82,8 @@ namespace TwoFactorAuthentication.Controllers
         {
             try
             {
-
                 if (ModelState.IsValid)
                 {
-
                     var signupResult = await _userManagementService.SignUp(userDto, new Guid(((ClaimsIdentity?)User.Identity)?.FindFirst(CustomClaimsTypes.UserID)?.Value));
 
 
@@ -202,33 +230,8 @@ namespace TwoFactorAuthentication.Controllers
                 {
                     await _userManagementService.Enable2FA(new Guid(((ClaimsIdentity?)User.Identity)?.FindFirst(CustomClaimsTypes.UserID)?.Value));
 
+                    await UpdateClaim(CustomClaimsTypes.IsTwoFactorEnabled, "True");
 
-                    // Retrieve the current authentication properties
-                    var authenticationProperties = await HttpContext.AuthenticateAsync();
-
-                    // Update the claims in the current identity
-                    var claimsIdentity = (ClaimsIdentity)authenticationProperties.Principal.Identity;
-                    claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(CustomClaimsTypes.IsTwoFactorEnabled));
-                    // Add or update other claims as needed
-                    claimsIdentity.AddClaim(new Claim(CustomClaimsTypes.IsTwoFactorEnabled, "True"));
-
-                    // Create a new claims principal with the updated identity
-                    var newClaimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-
-                    // Sign in the user with the updated authentication ticket
-                    //sign in
-                    await _httpContextAccessor.HttpContext.SignInAsync(newClaimsPrincipal,
-                        new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.MaxValue,
-                            AllowRefresh = true
-                        });
-
-                    // Remove the original authentication ticket from the response
-                    HttpContext.Response.Cookies.Delete(
-                        CookieAuthenticationDefaults.CookiePrefix + CookieAuthenticationDefaults.AuthenticationScheme);
 
                     return RedirectToAction(nameof(TwoFactorAuthenticationConfiguration), "User");
                 }
@@ -277,39 +280,7 @@ namespace TwoFactorAuthentication.Controllers
             {
                 if (_twoFactorAuthService.VerifyAuthentication(pincode, User.Identity.Name))
                 {
-                    // Retrieve the current authentication properties
-                    var authenticationProperties = await HttpContext.AuthenticateAsync();
-
-                    // Update the claims in the current identity
-                    var claimsIdentity = (ClaimsIdentity)authenticationProperties.Principal.Identity;
-                    claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(CustomClaimsTypes.Is2FAVerified));
-                    // Add or update other claims as needed
-                    claimsIdentity.AddClaim(new Claim(CustomClaimsTypes.Is2FAVerified, "True"));
-
-                    // Create a new claims principal with the updated identity
-                    var newClaimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-                    // Create a new authentication ticket with the updated claims principal
-                    var newAuthenticationTicket = new AuthenticationTicket(
-                        newClaimsPrincipal,
-                        authenticationProperties.Properties,
-                        CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    // Sign in the user with the updated authentication ticket
-                    //sign in
-                    await _httpContextAccessor.HttpContext.SignInAsync(newClaimsPrincipal,
-                        new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.MaxValue,
-                            AllowRefresh = true
-                        });
-
-                    // Remove the original authentication ticket from the response
-                    HttpContext.Response.Cookies.Delete(
-                        CookieAuthenticationDefaults.CookiePrefix + CookieAuthenticationDefaults.AuthenticationScheme);
-
-
+                    await UpdateClaim(CustomClaimsTypes.Is2FAVerified, "True");
 
                     // Redirect the user to the home page or a different page
                     return RedirectToAction("Index", "Home");
